@@ -59,7 +59,7 @@ namespace HexaPawnConsole
                         player.Learn();
                         player = Utils.SelectNextPlayer(player.OrderNumber);
                         player.GamesWon += 1;
-                        playerWon = false;
+                        playerWon = true;
                     }
                     var point = move.MoveRandom(player.OrderNumber);
                     var pawns = Utils.SelectPawnsByPlayer(player.OrderNumber).Where(x => !x.Removed).ToList();
@@ -69,7 +69,8 @@ namespace HexaPawnConsole
                         Console.WriteLine($"{x.Standing.X}x{x.Standing.Y}");
                     });
                     Console.WriteLine($"------------------------");
-
+                    
+                    new BuildBoard().CreateBoard();
                     playerWon = Utils.PlayerWon(player.OrderNumber);
 
                 }

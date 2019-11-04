@@ -35,7 +35,12 @@ namespace HexaPawnConsole
         public static List<Pawn> SelectPawnsByPlayer(OrderNumber player)
         {
             return AllPawns.Pawns.Where(x => x.Player == player).ToList();
-            
+
+        }
+        public static List<Pawn> SelectAllPawns()
+        {
+            return AllPawns.Pawns.ToList();
+
         }
         public static void ResetPlayers()
         {

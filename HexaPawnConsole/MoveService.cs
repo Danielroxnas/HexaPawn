@@ -48,7 +48,6 @@ namespace HexaPawnConsole
             var expectedPoint = new Point(pawn.Standing.X + 1, pawn.Standing.Y + Forward(pawn));
             if (expectedPoint.X > 3) return null;
             return ValidateMoveSidePoint(pawn, expectedPoint);
-
         }
 
         public Point GetMoveLeftPoint(Pawn pawn)
@@ -99,7 +98,6 @@ namespace HexaPawnConsole
                     allPawnsPoints.Add(x, points);
                 }
             });
-
             return allPawnsPoints;
         }
 
@@ -118,6 +116,7 @@ namespace HexaPawnConsole
             MoveTo(pawn, point);
             return point;
         }
+
         public DirectionType Direction(int input)
         {
             return (DirectionType)input;

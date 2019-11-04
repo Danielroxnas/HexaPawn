@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace HexaPawnConsole
+﻿namespace HexaPawnConsole
 {
     public class AI : IPlayer
     {
@@ -18,7 +13,6 @@ namespace HexaPawnConsole
         {
             new Pawn(id, point, false, OrderNumber);
         }
-
 
         public void Learn()
         {

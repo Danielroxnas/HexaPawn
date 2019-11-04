@@ -10,13 +10,11 @@ namespace HexaPawnConsole
         {
             if (other == null) return false;
 
-
             if (Standing.X == other.X && Standing.Y == other.Y)
                 return true;
 
             return false;
         }
-
 
         public bool Removed { get; set; } = false;
         public Pawn(int pawnId, Point startPoint, bool isHuman, OrderNumber player)
@@ -36,10 +34,7 @@ namespace HexaPawnConsole
         public OrderNumber Player { get; }
         public int PawnId { get; set; }
         public List<Point> RemovedMoves { get; set; } = new List<Point>();
-
     }
-
-
     public enum DirectionType
     {
         Forward, Left, Right

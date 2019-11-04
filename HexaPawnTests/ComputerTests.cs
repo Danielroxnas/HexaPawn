@@ -12,7 +12,7 @@ namespace HexaPawnTests
         public void It()
         {
             var sut = new Computer();
-            sut.hej();
+            //sut.hej();
         }
     }
 }
