@@ -25,7 +25,7 @@ namespace HexaPawnTests
         }
 
         [Test]
-        public void It_should_not_be_possible_to_move_if_blocked_farward()
+        public void It_should_not_be_possible_to_move_if_blocked_forward()
         {
             _pawn = Utils.SelectPawn(4);
             var pawn1 = Utils.SelectPawn(1);

@@ -31,7 +31,7 @@ namespace HexaPawnConsole
                     }
                     else
                     {
-                        Point point;
+                        Pawn point;
                         do
                         {
                           point =   move.MoveViaDirection(pawn1, DirectionType.Forward);

@@ -6,7 +6,7 @@ namespace HexaPawnConsole
 {
     public class MoveService
     {
-        public Point MoveTo(Pawn pawn, Point point)
+        public Pawn MoveTo(Pawn pawn, Point point)
         {
             pawn.Standing.X = point.X;
             pawn.Standing.Y = point.Y;
@@ -16,10 +16,10 @@ namespace HexaPawnConsole
                 .FirstOrDefault(x => x.Occupied(pawn.Standing));
             if (pawnToRemove != null) Utils.RemovePawn(pawnToRemove);
             
-            return pawn.Standing;
+            return pawn;
         }
 
-        public Point MoveViaDirection(Pawn pawn, DirectionType direction)
+        public Pawn MoveViaDirection(Pawn pawn, DirectionType direction)
         {
             var point = direction switch
             {
@@ -101,7 +101,7 @@ namespace HexaPawnConsole
             return allPawnsPoints;
         }
 
-        public Point MoveRandom(OrderNumber player)
+        public Pawn MoveRandom(OrderNumber player)
         {
             var points = GetAllAvailablePoints(player);
             if (!points.Keys.Any())
@@ -114,7 +114,7 @@ namespace HexaPawnConsole
             var value = points.Values.ElementAt(rndPawn);
             var point = value.Values.ElementAt(rnd.Next(0, value.Count()));
             MoveTo(pawn, point);
-            return point;
+            return pawn;
         }
 
         public DirectionType Direction(int input)
