@@ -1,25 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using static HexaPawnConsole.AI;
 
 namespace HexaPawnConsole
 {
     public class MoveService
     {
-        public Pawn MoveTo(Pawn pawn, Point point)
+        public Pawn MoveTo(Pawn pawn, Point point, IPlayer player)
         {
-            pawn.Standing.X = point.X;
-            pawn.Standing.Y = point.Y;
-            Utils.History.Add((pawn.PawnId, point));
-            var pawnToRemove = AllPawns.Pawns
+            var selectedPawn = player.Pawns
+                .Where(x => x.Equals(pawn)).FirstOrDefault();
+
+            pawn.Standing = new Point(point);
+
+
+            var pawnToRemove = Utils.Pawns
                 .Where(x => !x.Removed && x.PawnId != pawn.PawnId)
                 .FirstOrDefault(x => x.Occupied(pawn.Standing));
             if (pawnToRemove != null) Utils.RemovePawn(pawnToRemove);
             
+
+
             return pawn;
         }
 
-        public Pawn MoveViaDirection(Pawn pawn, DirectionType direction)
+        public Pawn MoveViaDirection(Pawn pawn, DirectionType direction, IPlayer player)
         {
             var point = direction switch
             {
@@ -29,13 +35,13 @@ namespace HexaPawnConsole
                 _ => null
             };
             if (point == null) return null;
-            return MoveTo(pawn, point);
+            return MoveTo(pawn, point, player);
         }
 
         public Point GetMoveForwardPoint(Pawn pawn)
         {
             var expectedPoint = new Point(pawn.Standing.X, pawn.Standing.Y + Forward(pawn));
-            if (AllPawns.Pawns
+            if (Utils.Pawns
                 .Where(x => !x.Removed)
                 .Any(x => x.Occupied(expectedPoint)) || pawn.Removed ) return null;
 
@@ -59,11 +65,11 @@ namespace HexaPawnConsole
 
         private Point ValidateMoveSidePoint(Pawn pawn, Point expectedPoint)
         {
-            if (AllPawns.Pawns
+            if (Utils.Pawns
                 .Where(x => !x.Removed && x.Player == pawn.Player)
                 .Any(x => x.Occupied(expectedPoint)) || pawn.Removed) return null;
 
-            if (AllPawns.Pawns
+            if (Utils.Pawns
                 .Where(x => !x.Removed && x.Player != pawn.Player)
                 .Any(x => x.Occupied(expectedPoint)) || pawn.Removed) return expectedPoint;
             return null;
@@ -88,7 +94,7 @@ namespace HexaPawnConsole
 
         public Dictionary<Pawn, Dictionary<DirectionType, Point>> GetAllAvailablePoints(OrderNumber player)
         {
-            var pawns = AllPawns.Pawns.Where(x => x.Player == player).ToList();
+            var pawns = Utils.Pawns.Where(x => x.Player == player).ToList();
             var allPawnsPoints = new Dictionary<Pawn, Dictionary<DirectionType, Point>>();
             pawns.ForEach(x =>
             {
@@ -101,9 +107,9 @@ namespace HexaPawnConsole
             return allPawnsPoints;
         }
 
-        public Pawn MoveRandom(OrderNumber player)
+        public Pawn MoveRandom(IPlayer player)
         {
-            var points = GetAllAvailablePoints(player);
+            var points = GetAllAvailablePoints(player.OrderNumber);
             if (!points.Keys.Any())
             {
                 return null;
@@ -113,7 +119,7 @@ namespace HexaPawnConsole
             var pawn = points.Keys.ElementAt(rndPawn);
             var value = points.Values.ElementAt(rndPawn);
             var point = value.Values.ElementAt(rnd.Next(0, value.Count()));
-            MoveTo(pawn, point);
+            MoveTo(pawn, point, player);
             return pawn;
         }
 

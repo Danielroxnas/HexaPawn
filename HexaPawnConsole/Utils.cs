@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace HexaPawnConsole
@@ -10,8 +9,9 @@ namespace HexaPawnConsole
         public static IPlayer PlayerTwo { get; set; }
         public static Pawn SelectPawn(int id)
         {
-            return AllPawns.Pawns.FirstOrDefault(x => x.PawnId == id);
+            return Pawns.FirstOrDefault(x => x.PawnId == id);
         }
+        public static List<Pawn> Pawns { get; set; } = new List<Pawn>();
         public static void InitPlayers()
         {
             PlayerOne = new Human(OrderNumber.ONE);
@@ -27,35 +27,30 @@ namespace HexaPawnConsole
         {
             return PlayerOne;
         }
-        public static IPlayer SelectNextPlayer(OrderNumber player)
+        public static IPlayer GetNextPlayer(OrderNumber player)
         {
-
             return OrderNumber.ONE == player ? PlayerTwo : PlayerOne;
         }
         public static List<Pawn> SelectPawnsByPlayer(OrderNumber player)
         {
-            return AllPawns.Pawns.Where(x => x.Player == player).ToList();
-
+            return Pawns.Where(x => x.Player == player).ToList();
         }
         public static List<Pawn> SelectAllPawns()
         {
-            return AllPawns.Pawns.ToList();
-
+            return Pawns.ToList();
         }
         public static void ResetPlayers()
         {
-            AllPawns.Pawns.ForEach(x =>
+           Pawns.ForEach(x =>
             {
                 x.Standing = new Point(x.StartPoint);
                 x.Removed = false;
             });
         }
 
-        public static bool PlayerWon(OrderNumber player)
+        public static bool PlayerWon(IPlayer player)
         {
-
-            var pawns = SelectPawnsByPlayer(player);
-
+            var pawns = player.Pawns;
             var startPosition = pawns.First().StartPoint.Y;
 
             if(startPosition is 1)
@@ -71,6 +66,5 @@ namespace HexaPawnConsole
         {
             pawn.Removed = true;
         }
-        public static List<(int, Point)> History { get; set; } = new List<(int, Point)>();
     }
 }

@@ -2,6 +2,7 @@ using HexaPawnConsole;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using static HexaPawnConsole.AI;
 
 namespace HexaPawnTests
 {
@@ -29,8 +30,8 @@ namespace HexaPawnTests
         {
             _pawn = Utils.SelectPawn(4);
             var pawn1 = Utils.SelectPawn(1);
-            _sut.MoveViaDirection(pawn1,DirectionType.Forward);
-            _sut.MoveViaDirection(_pawn, DirectionType.Forward);
+            _sut.MoveViaDirection(pawn1,DirectionType.Forward, Utils.PlayerOne);
+            _sut.MoveViaDirection(_pawn, DirectionType.Forward, Utils.PlayerTwo);
 
             Assert.That(_pawn.Standing.X, Is.EqualTo(1));
             Assert.That(_pawn.Standing.Y, Is.EqualTo(1));
@@ -40,9 +41,9 @@ namespace HexaPawnTests
         {
             _pawn = Utils.SelectPawn(4);
             var pawn1 = Utils.SelectPawn(1);
-            _sut.MoveViaDirection(pawn1, DirectionType.Forward);
+            _sut.MoveViaDirection(pawn1, DirectionType.Forward, Utils.PlayerOne);
             Utils.RemovePawn(pawn1);
-            _sut.MoveViaDirection(_pawn, DirectionType.Forward);
+            _sut.MoveViaDirection(_pawn, DirectionType.Forward, Utils.PlayerTwo);
 
             Assert.That(_pawn.Standing.X, Is.EqualTo(1));
             Assert.That(_pawn.Standing.Y, Is.EqualTo(2));
@@ -52,8 +53,8 @@ namespace HexaPawnTests
         {
             _pawn = Utils.SelectPawn(4);
             var pawn1 = Utils.SelectPawn(1);
-            _sut.MoveViaDirection(pawn1, DirectionType.Forward);
-            _sut.MoveViaDirection(_pawn, DirectionType.Forward);
+            _sut.MoveViaDirection(pawn1, DirectionType.Forward, Utils.PlayerOne);
+            _sut.MoveViaDirection(_pawn, DirectionType.Forward, Utils.PlayerTwo);
 
             Assert.That(_pawn.Standing.X, Is.EqualTo(1));
             Assert.That(_pawn.Standing.Y, Is.EqualTo(1));
@@ -64,8 +65,8 @@ namespace HexaPawnTests
         {
             _pawn = Utils.SelectPawn(4);
             var pawn1 = Utils.SelectPawn(5);
-            _sut.MoveViaDirection(pawn1, DirectionType.Forward);
-            _sut.MoveViaDirection(_pawn, DirectionType.Right);
+            _sut.MoveViaDirection(pawn1, DirectionType.Forward, Utils.PlayerOne);
+            _sut.MoveViaDirection(_pawn, DirectionType.Right, Utils.PlayerTwo);
 
             Assert.That(_pawn.Standing.X, Is.EqualTo(1));
             Assert.That(_pawn.Standing.Y, Is.EqualTo(1));
@@ -75,9 +76,9 @@ namespace HexaPawnTests
         {
             _pawn = Utils.SelectPawn(4);
             var pawn1 = Utils.SelectPawn(2);
-            _sut.MoveViaDirection(pawn1, DirectionType.Forward);
+            _sut.MoveViaDirection(pawn1, DirectionType.Forward, Utils.PlayerOne);
             Utils.RemovePawn(pawn1);
-            _sut.MoveViaDirection(_pawn, DirectionType.Right);
+            _sut.MoveViaDirection(_pawn, DirectionType.Right, Utils.PlayerTwo);
 
             Assert.That(_pawn.Standing.X, Is.EqualTo(1));
             Assert.That(_pawn.Standing.Y, Is.EqualTo(1));
@@ -88,8 +89,8 @@ namespace HexaPawnTests
         {
             _pawn = Utils.SelectPawn(4);
             var pawn1 = Utils.SelectPawn(2);
-            _sut.MoveViaDirection(pawn1, DirectionType.Forward);
-            _sut.MoveViaDirection(_pawn, DirectionType.Right);
+            _sut.MoveViaDirection(pawn1, DirectionType.Forward, Utils.PlayerOne);
+            _sut.MoveViaDirection(_pawn, DirectionType.Right, Utils.PlayerTwo);
 
             Assert.That(_pawn.Standing.X, Is.EqualTo(2));
             Assert.That(_pawn.Standing.Y, Is.EqualTo(2));
@@ -98,7 +99,7 @@ namespace HexaPawnTests
         public void It_should_not_be_possible_to_move_right_if_wall()
         {
             _pawn = Utils.SelectPawn(6);
-            _sut.MoveViaDirection(_pawn, DirectionType.Right);
+            _sut.MoveViaDirection(_pawn, DirectionType.Right, Utils.PlayerTwo);
 
             Assert.That(_pawn.Standing.X, Is.EqualTo(3));
             Assert.That(_pawn.Standing.Y, Is.EqualTo(1));
@@ -108,8 +109,8 @@ namespace HexaPawnTests
         {
             _pawn = Utils.SelectPawn(6);
             var pawn1 = Utils.SelectPawn(5);
-            _sut.MoveViaDirection(pawn1, DirectionType.Forward);
-            _sut.MoveViaDirection(_pawn, DirectionType.Left);
+            _sut.MoveViaDirection(pawn1, DirectionType.Forward, Utils.PlayerTwo);
+            _sut.MoveViaDirection(_pawn, DirectionType.Left, Utils.PlayerTwo);
 
             Assert.That(_pawn.Standing.X, Is.EqualTo(3));
             Assert.That(_pawn.Standing.Y, Is.EqualTo(1));
@@ -119,8 +120,8 @@ namespace HexaPawnTests
         {
             _pawn = Utils.SelectPawn(6);
             var pawn1 = Utils.SelectPawn(2);
-            _sut.MoveViaDirection(pawn1, DirectionType.Forward);
-            _sut.MoveViaDirection(_pawn, DirectionType.Left);
+            _sut.MoveViaDirection(pawn1, DirectionType.Forward, Utils.PlayerOne);
+            _sut.MoveViaDirection(_pawn, DirectionType.Left, Utils.PlayerTwo);
 
             Assert.That(_pawn.Standing.X, Is.EqualTo(2));
             Assert.That(_pawn.Standing.Y, Is.EqualTo(2));
@@ -131,9 +132,9 @@ namespace HexaPawnTests
         {
             _pawn = Utils.SelectPawn(6);
             var pawn1 = Utils.SelectPawn(2);
-            _sut.MoveViaDirection(pawn1, DirectionType.Forward);
+            _sut.MoveViaDirection(pawn1, DirectionType.Forward, Utils.PlayerOne);
             Utils.RemovePawn(pawn1);
-            _sut.MoveViaDirection(_pawn, DirectionType.Left);
+            _sut.MoveViaDirection(_pawn, DirectionType.Left, Utils.PlayerTwo);
 
             Assert.That(_pawn.Standing.X, Is.EqualTo(3));
             Assert.That(_pawn.Standing.Y, Is.EqualTo(1));
@@ -143,7 +144,7 @@ namespace HexaPawnTests
         public void It_should_not_be_possible_to_move_left_if_wall()
         {
             _pawn = Utils.SelectPawn(4);
-            _sut.MoveViaDirection(_pawn, DirectionType.Left);
+            _sut.MoveViaDirection(_pawn, DirectionType.Left, Utils.PlayerTwo);
 
             Assert.That(_pawn.Standing.X, Is.EqualTo(1));
             Assert.That(_pawn.Standing.Y, Is.EqualTo(1));
@@ -177,6 +178,11 @@ namespace HexaPawnTests
             Assert.That(result.Keys.First(x => x.PawnId == 1), Is.EqualTo(pawn1));
             Assert.That(result.Keys.First(x => x.PawnId == 2), Is.EqualTo(pawn2));
             Assert.That(result.Keys.First(x => x.PawnId == 3), Is.EqualTo(pawn3));
+        }
+        [Test]
+        public void IT()
+        {
+          
         }
     }
 }

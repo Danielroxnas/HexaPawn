@@ -1,24 +1,34 @@
-﻿namespace HexaPawnConsole
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace HexaPawnConsole
 {
     public class AI : IPlayer
     {
         public int GamesWon { get; set; }
         public OrderNumber OrderNumber { get; set; }
+        public List<Pawn> Pawns { get; set; }
+
         public AI(OrderNumber players)
         {
             OrderNumber = players;
+            Pawns = new List<Pawn>();
+
         }
+
 
         public void AddPawn(int id, Point point)
         {
-            new Pawn(id, point, false, OrderNumber);
+            Pawns.Add(new Pawn(id, point, OrderNumber));
         }
 
         public void Learn()
         {
-            var pawnMove = Utils.History[Utils.History.Count - 2];
-            var pawn = Utils.SelectPawn(pawnMove.Item1);
-            pawn.RemovedMoves.Add(pawnMove.Item2);
+        }
+
+        public IPlayer OppositePlayer()
+        {
+            return Utils.GetNextPlayer(OrderNumber);
         }
     }
 }

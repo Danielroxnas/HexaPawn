@@ -17,20 +17,18 @@ namespace HexaPawnConsole
         }
 
         public bool Removed { get; set; } = false;
-        public Pawn(int pawnId, Point startPoint, bool isHuman, OrderNumber player)
+        public Pawn(int id, Point startPoint, OrderNumber player)
         {
+            PawnId = id;
             StartPoint = startPoint;
             Standing = new Point(startPoint);
-            IsHuman = isHuman;
             Player = player;
-            PawnId = pawnId;
             Removed = false;
-            AllPawns.Pawns.Add(this);
+            Utils.Pawns.Add(this);
         }
 
         public Point Standing { get; set; }
         public Point StartPoint { get; set; }
-        public bool IsHuman { get; }
         public OrderNumber Player { get; }
         public int PawnId { get; set; }
         public List<Point> RemovedMoves { get; set; } = new List<Point>();
