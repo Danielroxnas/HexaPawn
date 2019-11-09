@@ -5,4 +5,13 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="AI.cs" />
+    <Compile Remove="MoveService.cs" />
+    <Compile Remove="Pawn.cs" />
+    <Compile Remove="Players.cs" />
+    <Compile Remove="Point.cs" />
+    <Compile Remove="Utils.cs" />
+  </ItemGroup>
+
 </Project>

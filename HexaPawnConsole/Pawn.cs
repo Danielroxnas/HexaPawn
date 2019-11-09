@@ -17,7 +17,7 @@ namespace HexaPawnConsole
         }
 
         public bool Removed { get; set; } = false;
-        public Pawn(int id, Point startPoint, OrderNumber player)
+        public Pawn(int id, Point startPoint, Piece player)
         {
             PawnId = id;
             StartPoint = startPoint;
@@ -29,7 +29,7 @@ namespace HexaPawnConsole
 
         public Point Standing { get; set; }
         public Point StartPoint { get; set; }
-        public OrderNumber Player { get; }
+        public Piece Player { get; }
         public int PawnId { get; set; }
         public List<Point> RemovedMoves { get; set; } = new List<Point>();
     }

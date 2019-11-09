@@ -47,7 +47,7 @@ namespace HexaPawnConsole
 
             return expectedPoint;
         }
-        private int Forward(Pawn pawn) => pawn.Player == OrderNumber.ONE ? -1 : 1;
+        private int Forward(Pawn pawn) => pawn.Player == Block.ONE ? -1 : 1;
 
         public Point GetMoveRightPoint(Pawn pawn)
         {
@@ -92,7 +92,7 @@ namespace HexaPawnConsole
             return !pawn.RemovedMoves.Any(x => x.X == forward.X && x.Y == forward.Y);
         }
 
-        public Dictionary<Pawn, Dictionary<DirectionType, Point>> GetAllAvailablePoints(OrderNumber player)
+        public Dictionary<Pawn, Dictionary<DirectionType, Point>> GetAllAvailablePoints(Block player)
         {
             var pawns = Utils.Pawns.Where(x => x.Player == player).ToList();
             var allPawnsPoints = new Dictionary<Pawn, Dictionary<DirectionType, Point>>();

@@ -173,7 +173,7 @@ namespace HexaPawnTests
             var pawn1 = Utils.SelectPawn(1);
             var pawn2 = Utils.SelectPawn(2);
             var pawn3 = Utils.SelectPawn(3);
-            var result = _sut.GetAllAvailablePoints(OrderNumber.ONE);
+            var result = _sut.GetAllAvailablePoints(Block.ONE);
 
             Assert.That(result.Keys.First(x => x.PawnId == 1), Is.EqualTo(pawn1));
             Assert.That(result.Keys.First(x => x.PawnId == 2), Is.EqualTo(pawn2));

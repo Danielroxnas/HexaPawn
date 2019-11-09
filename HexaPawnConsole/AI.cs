@@ -6,10 +6,10 @@ namespace HexaPawnConsole
     public class AI : IPlayer
     {
         public int GamesWon { get; set; }
-        public OrderNumber OrderNumber { get; set; }
+        public Piece OrderNumber { get; set; }
         public List<Pawn> Pawns { get; set; }
 
-        public AI(OrderNumber players)
+        public AI(Piece players)
         {
             OrderNumber = players;
             Pawns = new List<Pawn>();
@@ -26,9 +26,9 @@ namespace HexaPawnConsole
         {
         }
 
-        public IPlayer OppositePlayer()
-        {
-            return Utils.GetNextPlayer(OrderNumber);
-        }
+        //public IPlayer OppositePlayer()
+        //{
+        //    return Utils.GetNextPlayer(OrderNumber);
+        //}
     }
 }
