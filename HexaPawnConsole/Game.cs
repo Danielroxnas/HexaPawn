@@ -42,7 +42,6 @@ namespace HexaPawnConsole
     public class Board
     {
         public Piece[,] Pieces;
-        public List<IPlayer> players = new List<IPlayer>();
         public IPlayer P1;
         public IPlayer P2;
         public Piece currentPiece;
