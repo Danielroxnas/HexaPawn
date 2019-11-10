@@ -29,7 +29,7 @@ namespace HexaPawnConsole
                     }
                     if (_boardService.CheckIfCurrentIsAI())
                     {
-                        winner = _boardService.MakeAction(actions);
+                        winner = _boardService.MakeRandomAction(actions);
                     }
                     else
                     {

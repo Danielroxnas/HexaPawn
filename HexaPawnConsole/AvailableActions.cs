@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace HexaPawnConsole
 {
-    public class AvailableActions : IEquatable<AvailableActions>
+    public class AvailableActions : IEquatable<AvailableActions>, IAvailableActions
     {
         public AvailableActions()
         {
@@ -33,5 +33,9 @@ namespace HexaPawnConsole
             }
             return false;
         }
+    }
+
+    public interface IAvailableActions
+    {
     }
 }

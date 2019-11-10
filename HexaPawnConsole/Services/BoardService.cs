@@ -7,22 +7,18 @@ namespace HexaPawnConsole
     public class BoardService : IBoardService
     {
         public Color[,] Pieces { get; set; }
-        public IPlayer P1;
-        public IPlayer P2;
         public IPlayer CurrentPlayer { get; set; }
-        public int BoardSizeRows { get; }
-        public int BoardSizeColumns { get; }
+        private IPlayer P1;
+        private IPlayer P2;
+        private readonly int BoardSizeRows;
+        private readonly int BoardSizeColumns;
         private readonly IBoardState _boardState;
         private readonly IMoveService _moveService;
         private readonly List<AvailableActions> removedActions = new List<AvailableActions>();
 
         public BoardService(BoardService board, IBoardState boardState, IMoveService moveService)
+            :this(boardState, moveService)
         {
-            _boardState = boardState;
-            _moveService = moveService;
-            BoardSizeRows = 3;
-            BoardSizeColumns = 3;
-            Pieces = new Color[BoardSizeColumns, BoardSizeRows];
             for (int y = 0; y <= 2; y++)
             {
                 for (int x = 0; x <= 2; x++)
@@ -36,10 +32,7 @@ namespace HexaPawnConsole
         {
             _boardState = boardState;
             _moveService = moveService;
-            BoardSizeRows = 3;
-            BoardSizeColumns = 3;
-            Pieces = new Color[BoardSizeColumns, BoardSizeRows];
-            _boardState = new BoardState();
+            Pieces = new Color[3, 3];
         }
 
         public void ResetBoard()
@@ -52,7 +45,17 @@ namespace HexaPawnConsole
                 Pieces[2, i] = Color.White;
             }
         }
-
+        public void InitPlayers(bool playerOne, bool playerTwo)
+        {
+            P1 = playerOne == true ? new Human(Color.White, _boardState) : new AI(Color.White, _boardState) as IPlayer;
+            P2 = playerTwo == true ? new Human(Color.Black, _boardState) : new AI(Color.Black, _boardState) as IPlayer;
+            CurrentPlayer = P1;
+            for (int i = 0; i <= 2; i++)
+            {
+                Pieces[0, i] = Color.Black;
+                Pieces[2, i] = Color.White;
+            }
+        }
         public bool CheckIfCurrentIsAI()
         {
             if (CurrentPlayer == P1 && P1.GetType() == typeof(AI) ||
@@ -69,51 +72,34 @@ namespace HexaPawnConsole
             return false;
         }
 
-        public void InitPlayers(bool playerOne, bool playerTwo)
-        {
-            P1 = playerOne == true ? new Human(Color.White, _boardState) : new AI(Color.White, _boardState) as IPlayer;
-            P2 = playerTwo == true ? new Human(Color.Black, _boardState) : new AI(Color.Black, _boardState) as IPlayer;
-            CurrentPlayer = P1;
-            for (int i = 0; i <= 2; i++)
-            {
-                Pieces[0, i] = Color.Black;
-                Pieces[2, i] = Color.White;
-            }
-        }
-
         public bool ExecuteAction(AvailableActions action) =>
             action.Action switch
             {
-                Actions.Forward => _moveService.MoveForward(action.FromY, action.FromX, CurrentPlayer.Color, Pieces, CurrentPlayer),
-                Actions.AttackLeft => _moveService.AttackLeft(action.FromY, action.FromX, CurrentPlayer.Color, Pieces, CurrentPlayer),
-                Actions.AttackRight => _moveService.AttackRight(action.FromY, action.FromX, CurrentPlayer.Color, Pieces, CurrentPlayer),
+                Actions.Forward => _moveService.MoveForward(action.FromY, action.FromX, CurrentPlayer.Color, Pieces),
+                Actions.AttackLeft => _moveService.AttackLeft(action.FromY, action.FromX, CurrentPlayer.Color, Pieces),
+                Actions.AttackRight => _moveService.AttackRight(action.FromY, action.FromX, CurrentPlayer.Color, Pieces),
                 _ => false
             };
+
+        public void RegisterMove(AvailableActions availableActions, IPlayer player)
+        {
+            player.LastAvailableActions = availableActions;
+        }
+
         public bool MakeAction(List<AvailableActions> actions, int index)
         {
             var action = actions.ElementAt(index);
             CurrentPlayer.LastState(this);
             ExecuteAction(action);
+            RegisterMove(action, CurrentPlayer);
             _boardState.Copy(this);
             if (CheckMovedWinner(CurrentPlayer.Color))
             {
-                if (CurrentPlayer.Color == Color.White)
+                if (!CheckIfCurrentIsAI())
                 {
-                    if (!CheckIfCurrentIsAI())
-                    {
-                        AiLearn();
-
-                    }
-                    P1.TimesWon++;
+                    AiLearn();
                 }
-                else
-                {
-                    if (!CheckIfCurrentIsAI())
-                    {
-                        AiLearn();
-                    }
-                    P2.TimesWon++;
-                }
+                CurrentPlayer.TimesWon++;
                 return true;
             }
             ChangeCurrentPlayer();
@@ -132,14 +118,7 @@ namespace HexaPawnConsole
             if (!actions.Any())
             {
                 ChangeCurrentPlayer();
-                if (CurrentPlayer.Color == Color.White)
-                {
-                    P1.TimesWon++;
-                }
-                else
-                {
-                    P2.TimesWon++;
-                }
+                CurrentPlayer.TimesWon++;
                 return false;
             }
             return true;
@@ -169,9 +148,9 @@ namespace HexaPawnConsole
         public List<AvailableActions> GetAllPlayerAvailableActions(Color color)
         {
             var moveDirections = new List<AvailableActions>();
-            for (int y = 0; y <= BoardSizeRows - 1; y++)
+            for (int y = 0; y <= 3 - 1; y++)
             {
-                for (int x = 0; x <= BoardSizeColumns - 1; x++)
+                for (int x = 0; x <= 3 - 1; x++)
                 {
                     if (Pieces[y, x] == color)
                     {
@@ -227,7 +206,7 @@ namespace HexaPawnConsole
             ChangeCurrentPlayer();
         }
 
-        public bool MakeAction(List<AvailableActions> actions)
+        public bool MakeRandomAction(List<AvailableActions> actions)
         {
             var rnd = new Random();
             if (actions.Any())
