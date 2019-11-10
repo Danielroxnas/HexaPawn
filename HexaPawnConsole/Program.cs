@@ -1,40 +1,32 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace HexaPawnConsole
 {
     class Program
     {
+        private static IServiceCollection ConfigureServices()
+        {
+            IServiceCollection services = new ServiceCollection();
+            services.AddTransient<IBoardService, BoardService>();
+            services.AddTransient<IBoardState, BoardState>();
+            services.AddTransient<IMoveService, MoveService>();
+
+            // IMPORTANT! Register our application entry point
+            services.AddTransient<Game>();
+            return services;
+        }
         static void Main(string[] args)
         {
-            var board = new Board();
-            board.InitPlayers(new Human(), new AI());
-            var bb = new Game();
-            while (true)
-            {
-                var winner = false;
-               
-                while (winner == false)
-                {
-                    var actions = bb.GenerateBoard(board);
-                    if(!board.CheckAvailableActions(actions))
-                    {
-                        winner = true;
-                        continue;
-                    }
-                    if(board.CheckIfCurrentIsAI())
-                    {
-                        winner = board.MakeAction(actions);
-                    }
-                    else
-                    {
-                        var index = Console.ReadLine();
-                        winner = board.MakeAction(actions,int.Parse(index));
-                    }
-                }
-                Console.WriteLine($"{board.currentPiece} WINNER");
-                Console.ReadKey();
-                board.ResetBoard();
-            }
+            // Create service collection and configure our services
+            var services = ConfigureServices();
+            // Generate a provider
+            var serviceProvider = services.BuildServiceProvider();
+
+            // Kick off our actual code
+            serviceProvider.GetService<Game>().GenerateBoard();
+
+
         }
     }
 }

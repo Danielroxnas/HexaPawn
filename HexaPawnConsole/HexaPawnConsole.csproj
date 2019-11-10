@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,12 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="AI.cs" />
-    <Compile Remove="MoveService.cs" />
     <Compile Remove="Pawn.cs" />
     <Compile Remove="Players.cs" />
     <Compile Remove="Point.cs" />
     <Compile Remove="Utils.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
   </ItemGroup>
 
 </Project>
