@@ -12,29 +12,35 @@ namespace HexaPawnConsole
         {
             _boardService = boardService;
         }
-        public List<AvailableActions> GenerateBoard()
+        public List<AvailableAction> GenerateBoard()
         {
             _boardService.InitPlayers(true, false);
+            _boardService.InitPieces();
             while (true)
             {
                 var winner = false;
 
                 while (winner == false)
                 {
-                    var actions = AvailableActions();
-                    if (!_boardService.CheckAvailableActions(actions))
+                    try
                     {
-                        winner = true;
-                        continue;
+                        var actions = AvailableActions();
+                        if (_boardService.CheckIfCurrentPlayerIsAI())
+                        {
+                            winner = _boardService.MakeRandomAction(actions);
+
+
+                        }
+                        else
+                        {
+                            var index = Console.ReadLine();
+                            winner = _boardService.MakeAction(actions, int.Parse(index));
+                        }
                     }
-                    if (_boardService.CheckIfCurrentIsAI())
+                    catch (Exception ex)
                     {
-                        winner = _boardService.MakeRandomAction(actions);
-                    }
-                    else
-                    {
-                        var index = Console.ReadLine();
-                        winner = _boardService.MakeAction(actions, int.Parse(index));
+                        Console.WriteLine($"Error {ex.Message} try again!");
+
                     }
                 }
                 Console.WriteLine($"{_boardService.CurrentPlayer.Color} WINNER");
@@ -44,7 +50,7 @@ namespace HexaPawnConsole
             }
 
         }
-        public List<AvailableActions> AvailableActions()
+        public List<AvailableAction> AvailableActions()
         {
 
             for (int y = 0; y <= 2; y++)
@@ -72,5 +78,5 @@ namespace HexaPawnConsole
             return actions;
         }
     }
-    
+
 }

@@ -9,7 +9,7 @@ namespace HexaPawnConsole
             Color = piece;
             BoardState = boardState;
         }
-        public AvailableActions LastAvailableActions { get; set; } = new AvailableActions();
+        public AvailableAction LastAvailableActions { get; set; } = new AvailableAction();
         public Color Color { get; set; }
         public int TimesWon { get; set; } = 0;
         public IBoardState BoardState { get; }

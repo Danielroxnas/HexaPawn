@@ -2,13 +2,13 @@
 {
     public class MoveService : IMoveService
     {
-        
-        
+
+
         public int ForwardDirection(Color color)
         {
             return color == Color.White ? -1 : 1;
         }
-        
+
         #region Can
         public bool CanMoveForward(int y, int x, Color color, Color[,] Pieces)
         {

@@ -16,7 +16,7 @@ namespace HexaPawnConsole
         public BoardService GetBoardState(BoardService board)
         {
             var b = Boards.Where(z => z.Pieces.Cast<int>().SequenceEqual(board.Pieces.Cast<int>())).FirstOrDefault();
-            
+
             return b ?? null;
         }
 

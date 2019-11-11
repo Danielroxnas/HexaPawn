@@ -6,18 +6,17 @@ namespace HexaPawnConsole
     {
         Color[,] Pieces { get; set; }
         IPlayer CurrentPlayer { get; set; }
+        IPlayer P1 { get; set; }
+        IPlayer P2 { get; set; }
         void AiLearn();
         void ChangeCurrentPlayer();
-        bool CheckAvailableActions(List<AvailableActions> actions);
-        bool CheckIfCurrentIsAI();
-        bool CheckMovedWinner(Color color);
-        bool ExecuteAction(AvailableActions action);
-        List<AvailableActions> GetAllPlayerAvailableActions(Color color);
+        bool CheckIfCurrentPlayerIsAI();
+        bool ExecuteAction(AvailableAction action);
+        List<AvailableAction> GetAllPlayerAvailableActions(Color color);
         void InitPlayers(bool playerOne, bool playerTwo);
-        bool MakeRandomAction(List<AvailableActions> actions);
-        bool MakeAction(List<AvailableActions> actions, int index);
+        void InitPieces();
+        bool MakeRandomAction(List<AvailableAction> actions);
+        bool MakeAction(List<AvailableAction> actions, int index);
         void ResetBoard();
-        void RegisterMove(AvailableActions availableActions, IPlayer player);
-
     }
 }
