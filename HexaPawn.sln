@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexaPawnConsole", "HexaPawn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexaPawnTests", "HexaPawnTests\HexaPawnTests.csproj", "{324DAB5A-D3C3-4510-8CD9-FD4C1CE0FCBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexaPawnWeb", "HexaPawnWeb\HexaPawnWeb.csproj", "{6B5AFDBB-A5FE-43E8-A289-C757EA848E92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexaPawnWeb", "HexaPawnWeb\HexaPawnWeb.csproj", "{6B5AFDBB-A5FE-43E8-A289-C757EA848E92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexaPawnServices", "HexaPawnServices\HexaPawnServices.csproj", "{1342D536-6EBD-409C-939F-7499A6AE481C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{6B5AFDBB-A5FE-43E8-A289-C757EA848E92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B5AFDBB-A5FE-43E8-A289-C757EA848E92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B5AFDBB-A5FE-43E8-A289-C757EA848E92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1342D536-6EBD-409C-939F-7499A6AE481C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1342D536-6EBD-409C-939F-7499A6AE481C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1342D536-6EBD-409C-939F-7499A6AE481C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1342D536-6EBD-409C-939F-7499A6AE481C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
