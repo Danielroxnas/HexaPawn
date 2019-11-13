@@ -1,3 +1,4 @@
+using HexaPawnServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -19,7 +20,9 @@ namespace HexaPawnWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddTransient<IBoardService, BoardService>();
+            services.AddTransient<IBoardState, BoardState>();
+            services.AddTransient<IMoveService, MoveService>();
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory

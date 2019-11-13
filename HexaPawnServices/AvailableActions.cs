@@ -5,7 +5,11 @@ namespace HexaPawnServices
 {
     public class AvailableAction : IEquatable<AvailableAction>, IAvailableActions
     {
-        public int FromX, FromY, ToX, ToY;
+        //public int FromX, FromY, ToX, ToY {get;set;}
+        public int FromY { get; set; }
+        public int FromX { get; set; }
+        public int ToY { get; set; }
+        public int ToX { get; set; }
 
         public AvailableAction()
         {
