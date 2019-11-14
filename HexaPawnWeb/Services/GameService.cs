@@ -1,4 +1,5 @@
 ﻿using HexaPawnServices;
+using HexaPawnWeb.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,25 +7,32 @@ using System.Threading.Tasks;
 
 namespace HexaPawnWeb.Services
 {
-    public class GameService
+    public class GameService : IGameService
     {
         private readonly IBoardService _boardService;
 
         public GameService(IBoardService boardService)
         {
-
             _boardService = boardService;
-            _boardService.InitPlayers(true, false);
-            _boardService.InitPieces();
         }
-        public List<AvailableAction> AvailableActions()
-        {
-            return _boardService.GetAllPlayerAvailableActions(_boardService.CurrentPlayer.Color);
 
-        }
-        public object GetPieces()
+        public List<AvailableAction> GetActions(BoardService board)
         {
-            return _boardService.Pieces;
+            return board.GetAllPlayerAvailableActions(board.CurrentPlayer.Color);
+        }
+
+        public BoardService GetBoard()
+        {
+
+            _boardService.InitPieces();
+            _boardService.InitPlayers(true, true);
+            return _boardService as BoardService;
+        }
+
+        public BoardService MakeAction(BoardActionDTO boardAction)
+        {
+            boardAction.BoardService.MakeAction(boardAction.AvailableAction);
+            return boardAction.BoardService;
 
         }
     }

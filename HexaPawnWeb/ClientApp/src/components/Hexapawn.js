@@ -2,7 +2,7 @@
 
 export const HexaPawn = (props) => {
 
-    const [piece, setPiece] = useState([]);
+    const [board, setBoard] = useState([]);
     const [loading, setLoading] = useState(true);
     const [actions, setActions] = useState([]);
     const [winning, setWinning] = useState(false);
@@ -10,51 +10,48 @@ export const HexaPawn = (props) => {
     const populatData = async () => {
         const response = await fetch('api/games/GameBoard');
         const data = await response.json();
-        setPiece(data);
+        setBoard(data);
         setLoading(false);
         console.log(data);
-    };
+        var d = JSON.stringify(data);
+        generateAction(d);
 
-    //fromX: action.fromX,
-    //    fromY: action.fromY,
-    //        toX: action.toX,
-    //            toY: action.toY,
+    };  
 
+    const boardAction = {...board, ...actions}
     const makeAction = async (action) => {
-        const response = await fetch('api/games/makeAction/', {
-            body: action,
-            method: 'Post',
-            credentials: 'same-origin',
+        setActions(action);
+        const response = await fetch('api/games/makeaction', {
+            method: 'POST',
+            body: JSON.stringify(boardAction),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             }
         })
         const data = await response.json();
-        setWinning(data);
-        //response = await fetch('api/games/getActions');
-        //data = await response.json();
-        //setAction(data);
+        setBoard(data);
+        generateAction();
     }
-    // Detta blir som en componentDidMount
 
-
-
-    const generateAction = async () => {
-        const response = await fetch("api/games/getActions");
+    const generateAction = async (fetchdata) => {
+        const response = await fetch("api/games/getActions", {
+            method: 'POST',
+            body: fetchdata,
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
         const data = await response.json();
         setActions(data);
     }
     useEffect(() => {
-        generateAction();
-    }, [])
-
-    useEffect(() => {
         populatData();
+
     }, [])
 
     let contents = loading
         ? <p><em>Loading...</em></p>
-        : renderHexapawnTable(piece);
+        : renderHexapawnTable(board.Pieces);
     return (
         <div>
             <h1 id="tabelLabel" >Hexa pawn</h1>
@@ -68,21 +65,17 @@ export const HexaPawn = (props) => {
 
 }
 const Actions = props => {
-    //console.log(props);
-    const handleClick = (a) => {
-        console.log(a);
-    };
     return (
+            //{props.actions.map((a, i) => {
+            //    return (
+            //        <button
+            //            key={i}
+            //            onClick={() => props.sa(a)}>
+            //            {a.action}
+            //        </button>
+            //    );
+            //})}
         <div>
-            {props.action.map((a, i) => {
-                return (
-                    <button
-                        key={i}
-                        onClick={() => props.sa(a)}>
-                        {a.action}
-                    </button>
-                );
-            })}
         </div>
     );
 }

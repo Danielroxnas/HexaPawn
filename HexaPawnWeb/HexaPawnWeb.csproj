@@ -33,7 +33,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HexaPawnServices\HexaPawnServices.csproj" />
-    <ProjectReference Include="..\Services\HexaPawnServices.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

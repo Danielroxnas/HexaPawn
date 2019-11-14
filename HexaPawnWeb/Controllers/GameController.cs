@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HexaPawnServices;
+using HexaPawnWeb.Models;
 using HexaPawnWeb.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,46 +15,34 @@ namespace HexaPawnWeb.Controllers
     [ApiController]
     public class GamesController : ControllerBase
     {
-        private readonly IBoardService _boardService;
+        private readonly IGameService _gameService;
         
-        public GamesController(IBoardService boardService)
+        public GamesController(IGameService gameService)
         {
-            _boardService = boardService;
-            _boardService.InitPieces();
-            _boardService.InitPlayers(true,true);
-        }
-        [HttpGet]
-        public List<AvailableAction> Game()
-        {
-            var x = new GameService(_boardService);
-            return x.AvailableActions();
+            _gameService = gameService;
 
         }
         [HttpGet]
-        public object GameBoard()
+        public BoardService GameBoard()
         {
-            var x = new GameService(_boardService);
+           return  _gameService.GetBoard();
+            //return JsonConvert.SerializeObject(y);
 
-            var y = x.GetPieces();
-            return JsonConvert.SerializeObject(y);
-
-        }
-        [HttpGet]
-        public List<AvailableAction> GetActions()
-        {
-            return _boardService.GetAllPlayerAvailableActions(_boardService.CurrentPlayer.Color);
         }
 
         [HttpPost]
-        public bool MakeAction(AvailableAction availableAction)
+        public object GetActions([FromBody]object boardService)
         {
-            return false;
+            var j = JsonConvert.DeserializeObject<BoardService>(boardService.ToString());
+            var actions = _gameService.GetActions(j);
+            return JsonConvert.SerializeObject(actions);
         }
 
         [HttpPost]
-        public bool MakeAction(object availableAction)
+        public object MakeAction([FromBody]BoardActionDTO boardAction)
         {
-            return false;
+             var board = _gameService.MakeAction(boardAction);
+            return JsonConvert.SerializeObject(board);
         }
     }
 }
