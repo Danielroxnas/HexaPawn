@@ -44,14 +44,14 @@ namespace HexaPawnWeb.Controllers
             return _boardService.GetAllPlayerAvailableActions(_boardService.CurrentPlayer.Color);
         }
 
-        [HttpGet]
-        public bool MakeAction([FromBody]AvailableAction availableAction)
+        [HttpPost]
+        public bool MakeAction(AvailableAction availableAction)
         {
             return false;
         }
 
-        [HttpGet]
-        public bool MakeAction([FromBody]string availableAction)
+        [HttpPost]
+        public bool MakeAction(object availableAction)
         {
             return false;
         }

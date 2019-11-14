@@ -15,20 +15,29 @@ export const HexaPawn = (props) => {
         console.log(data);
     };
 
-
+    //fromX: action.fromX,
+    //    fromY: action.fromY,
+    //        toX: action.toX,
+    //            toY: action.toY,
 
     const makeAction = async (action) => {
         const response = await fetch('api/games/makeAction/', {
-        body: JSON.stringify(action)});
+            body: action,
+            method: 'Post',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
         const data = await response.json();
         setWinning(data);
         //response = await fetch('api/games/getActions');
         //data = await response.json();
         //setAction(data);
-    };
+    }
     // Detta blir som en componentDidMount
- 
-   
+
+
 
     const generateAction = async () => {
         const response = await fetch("api/games/getActions");
@@ -41,7 +50,7 @@ export const HexaPawn = (props) => {
 
     useEffect(() => {
         populatData();
-    }, []) 
+    }, [])
 
     let contents = loading
         ? <p><em>Loading...</em></p>
