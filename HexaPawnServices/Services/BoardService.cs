@@ -8,6 +8,7 @@ namespace HexaPawnServices
     {
         public Color[,] Pieces { get; set; }
         public IPlayer CurrentPlayer { get; set; }
+
         private readonly IBoardState _boardState;
         public IPlayer P1 { get; set; } = new Human(Color.White, null);
         public IPlayer P2 { get; set; } = new Human(Color.Black, null);
@@ -83,6 +84,11 @@ namespace HexaPawnServices
         {
 
             var action = actions.ElementAt(index);
+            return Execute(action);
+        }
+
+        private bool Execute(AvailableAction action)
+        {
             CurrentPlayer.LastState(this);
             if (!ExecuteAction(action))
             {
@@ -194,6 +200,11 @@ namespace HexaPawnServices
 
             }
             return false;
+        }
+
+        public bool MakeAction(AvailableAction action)
+        {
+            return Execute(action);
         }
     }
 }

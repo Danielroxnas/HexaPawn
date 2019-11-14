@@ -4,7 +4,7 @@ namespace HexaPawnConsole
 {
     public interface IBoardService
     {
-        Color[,] Pieces { get; set; }
+        Pieces Pieces { get; set; }
         IPlayer CurrentPlayer { get; set; }
         IPlayer P1 { get; set; }
         IPlayer P2 { get; set; }

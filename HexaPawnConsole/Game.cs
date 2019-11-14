@@ -55,9 +55,9 @@ namespace HexaPawnConsole
                 Console.Write($"{y} |");
                 for (int x = 0; x <= 2; x++)
                 {
-                    if (_boardService.Pieces[y, x] == Color.Black) Console.Write("[2]");
-                    if (_boardService.Pieces[y, x] == Color.Empty) Console.Write("[ ]");
-                    if (_boardService.Pieces[y, x] == Color.White) Console.Write("[1]");
+                    if (_boardService.Pieces[y, x] == 2) Console.Write("[2]");
+                    if (_boardService.Pieces[y, x] == 0) Console.Write("[ ]");
+                    if (_boardService.Pieces[y, x] == 1) Console.Write("[1]");
                 }
                 Console.WriteLine("");
             }

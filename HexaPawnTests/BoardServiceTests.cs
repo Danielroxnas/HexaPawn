@@ -22,19 +22,19 @@ namespace HexaPawnTests
         public void It_should_generate_a_3x3_board()
         {
             var sut = new BoardService(null, null);
-            Assert.That(sut.Pieces[0, 0], Is.EqualTo(Color.Empty));
-            Assert.That(sut.Pieces[2, 2], Is.EqualTo(Color.Empty));
+            Assert.That(sut.Pieces[0, 0], Is.EqualTo((int)Color.Empty));
+            Assert.That(sut.Pieces[2, 2], Is.EqualTo((int)Color.Empty));
         }
 
         [Test]
         public void It_should_init_pieces_white_and_black()
         {
-            Assert.That(_sut.Pieces[2, 0], Is.EqualTo(Color.White));
-            Assert.That(_sut.Pieces[2, 1], Is.EqualTo(Color.White));
-            Assert.That(_sut.Pieces[2, 2], Is.EqualTo(Color.White));
-            Assert.That(_sut.Pieces[0, 0], Is.EqualTo(Color.Black));
-            Assert.That(_sut.Pieces[0, 1], Is.EqualTo(Color.Black));
-            Assert.That(_sut.Pieces[0, 2], Is.EqualTo(Color.Black));
+            Assert.That(_sut.Pieces[2, 0], Is.EqualTo(1));
+            Assert.That(_sut.Pieces[2, 1], Is.EqualTo(1));
+            Assert.That(_sut.Pieces[2, 2], Is.EqualTo(1));
+            Assert.That(_sut.Pieces[0, 0], Is.EqualTo(2));
+            Assert.That(_sut.Pieces[0, 1], Is.EqualTo(2));
+            Assert.That(_sut.Pieces[0, 2], Is.EqualTo(2));
         }
 
         [Test]
@@ -55,9 +55,9 @@ namespace HexaPawnTests
         [Test]
         public void It_should_reset_board()
         {
-            _sut.Pieces[1, 1] = Color.White;
+            _sut.Pieces[1, 1] = 1;
             _sut.ResetBoard();
-            Assert.That(_sut.Pieces[1, 1], Is.EqualTo(Color.Empty));
+            Assert.That(_sut.Pieces[1, 1], Is.EqualTo(0));
         }
 
         [Test]
@@ -113,7 +113,7 @@ namespace HexaPawnTests
         [Test]
         public void It_should_return_AvailableActions_with_value()
         {
-            _sut.Pieces[1, 1] = Color.Black;
+            _sut.Pieces[1, 1] = 2;
             var result = _sut.GetAllPlayerAvailableActions(Color.White);
             Assert.That(result[1].Action, Is.EqualTo(Actions.AttackRight));
             Assert.That(result[3].Action, Is.EqualTo(Actions.AttackLeft));

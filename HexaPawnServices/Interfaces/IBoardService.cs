@@ -17,6 +17,7 @@ namespace HexaPawnServices
         void InitPieces();
         bool MakeRandomAction(List<AvailableAction> actions);
         bool MakeAction(List<AvailableAction> actions, int index);
+        bool MakeAction(AvailableAction action);
         void ResetBoard();
     }
 }
