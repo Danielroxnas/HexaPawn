@@ -9,7 +9,7 @@ namespace HexaPawnConsole
             IServiceCollection services = new ServiceCollection();
             services.AddTransient<IBoardService, BoardService>();
             services.AddTransient<IBoardState, BoardState>();
-            services.AddTransient<IMoveService, MoveService>();
+            services.AddTransient<IMovService, MovService>();
 
             // IMPORTANT! Register our application entry point
             services.AddTransient<Game>();

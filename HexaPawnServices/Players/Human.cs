@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 
-namespace HexaPawnServices
+namespace HexaPawnService
 {
-    public class Human : IPlayer
+    public class Human 
     {
         public Human(Color piece, IBoardState boardState)
         {
@@ -17,7 +17,7 @@ namespace HexaPawnServices
         public BoardService LastBord { get; set; }
         public void LastState(BoardService board)
         {
-            var b = BoardState.Boards.Where(z => z.Pieces.Cast<int>().SequenceEqual(board.Pieces.Cast<int>())).FirstOrDefault();
+            var b = BoardState.Boards.Where(z => z.Pieces.Equals(board.Pieces)).FirstOrDefault();
             LastBord = b;
         }
     }

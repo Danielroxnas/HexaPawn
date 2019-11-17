@@ -1,62 +1,20 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HexaPawnService
+namespace HexaPawnServices
 {
-    public class Pieces
-    {
-
-        int[,] data;
-
-        public Pieces()
-        {
-            data = new int[3, 3];
-        }
-
-        public int this[int y,int x] {
-            get { return data[y,x]; }
-            set { data[y, x] = value; } }
-    }
-    public class ConcreteConverter<T> : JsonConverter
-    {
-        public override bool CanConvert(Type objectType) => true;
-
-        public override object ReadJson(JsonReader reader,
-         Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            return serializer.Deserialize<T>(reader);
-        }
-
-        public override void WriteJson(JsonWriter writer,
-            object value, JsonSerializer serializer)
-        {
-            serializer.Serialize(writer, value);
-        }
-    }
     public class BoardService : IBoardService
     {
-        [JsonProperty]
-        public Pieces Pieces { get; set; }
+        public Color[,] Pieces { get; set; }
+        public IPlayer CurrentPlayer { get; set; }
 
-        //   [JsonProperty(ItemConverterType = typeof(ConcreteConverter<Player>))]
-        [JsonProperty]
-        public Player CurrentPlayer { get; set; }
         private readonly IBoardState _boardState;
-
-        //[JsonProperty(ItemConverterType = typeof(ConcreteConverter<Player>))]
-        public Player P1 { get; set; } = new Player(Color.White, null, true);
-        //[JsonProperty(ItemConverterType = typeof(ConcreteConverter<Player>))]
-        public Player P2 { get; set; } = new Player(Color.Black, null, true);
-        
+        public IPlayer P1 { get; set; } = new Human(Color.White, null);
+        public IPlayer P2 { get; set; } = new Human(Color.Black, null);
         private readonly IMoveService _moveService;
         private readonly List<AvailableAction> removedActions = new List<AvailableAction>();
 
-        public BoardService()
-        {
-
-        }
         public BoardService(BoardService board, IBoardState boardState, IMoveService moveService)
             : this(boardState, moveService)
         {
@@ -68,39 +26,39 @@ namespace HexaPawnService
                 }
             }
         }
+        public BoardService()
+        {
 
+        }
         public BoardService(IBoardState boardState, IMoveService moveService)
         {
             _boardState = boardState;
             _moveService = moveService;
-            Pieces = new Pieces();
-           // Pieces = new Color[3, 3];
+            Pieces = new Color[3, 3];
         }
 
         public void ResetBoard()
         {
-            Pieces = new Pieces();
-
-            //Pieces = new Color[3, 3];
+            Pieces = new Color[3, 3];
             CurrentPlayer = P1;
             for (int i = 0; i <= 2; i++)
             {
-                Pieces[0, i] = 2;
-                Pieces[2, i] = 1;
+                Pieces[0, i] = Color.Black;
+                Pieces[2, i] = Color.White;
             }
         }
         public void InitPieces()
         {
             for (int i = 0; i <= 2; i++)
             {
-                Pieces[0, i] = 2;
-                Pieces[2, i] = 1;
+                Pieces[0, i] = Color.Black;
+                Pieces[2, i] = Color.White;
             }
         }
         public void InitPlayers(bool playerOne, bool playerTwo)
         {
-            P1 = new Player(Color.White, _boardState, playerOne);
-            P2 = new Player(Color.Black, _boardState, playerTwo);
+            P1 = playerOne == true ? new Human(Color.White, _boardState) : new AI(Color.White, _boardState) as IPlayer;
+            P2 = playerTwo == true ? new Human(Color.Black, _boardState) : new AI(Color.Black, _boardState) as IPlayer;
             CurrentPlayer = P1;
         }
 
@@ -117,18 +75,14 @@ namespace HexaPawnService
         public bool ExecuteAction(AvailableAction action) =>
             action.Action switch
             {
-                Actions.Forward => _moveService.MoveForward(action.FromY, action.FromX, (int)CurrentPlayer.Color, Pieces),
-                Actions.AttackLeft => _moveService.AttackLeft(action.FromY, action.FromX, (int)CurrentPlayer.Color, Pieces),
-                Actions.AttackRight => _moveService.AttackRight(action.FromY, action.FromX, (int)CurrentPlayer.Color, Pieces),
+                Actions.Forward => _moveService.MoveForward(action.FromY, action.FromX, CurrentPlayer.Color, Pieces),
+                Actions.AttackLeft => _moveService.AttackLeft(action.FromY, action.FromX, CurrentPlayer.Color, Pieces),
+                Actions.AttackRight => _moveService.AttackRight(action.FromY, action.FromX, CurrentPlayer.Color, Pieces),
                 _ => false
             };
 
         private void RegisterAction(AvailableAction availableActions) => CurrentPlayer.LastAvailableActions = availableActions;
 
-        public bool MakeAction(AvailableAction action)
-        {
-            return Execute(action);
-        }
         public bool MakeAction(List<AvailableAction> actions, int index)
         {
 
@@ -145,7 +99,7 @@ namespace HexaPawnService
             }
             RegisterAction(action);
             _boardState.Copy(this);
-            if (CheckMovedWinner(CurrentPlayer))
+            if (CheckMovedWinner(CurrentPlayer.Color))
             {
                 if (!CheckIfCurrentPlayerIsAI())
                 {
@@ -163,29 +117,25 @@ namespace HexaPawnService
             CurrentPlayer = CurrentPlayer == P1 ? P2 : P1;
         }
 
-        private bool CheckMovedWinner(IPlayer player)
+        private bool CheckMovedWinner(Color color)
         {
-            if (player.Color == Color.White)
+            if (color == Color.White)
             {
-                if (Pieces[0, 0] == 1) return true;
-                if (Pieces[0, 1] == 1) return true;
-                if (Pieces[0, 2] == 1) return true;
+                if (Pieces[0, 0] == color) return true;
+                if (Pieces[0, 1] == color) return true;
+                if (Pieces[0, 2] == color) return true;
                 if (!GetAllPlayerAvailableActions(Color.Black).Any()) return true;
             }
             else
             {
-                if (Pieces[2, 0] == 2) return true;
-                if (Pieces[2, 1] == 2) return true;
-                if (Pieces[2, 2] == 2) return true;
+                if (Pieces[2, 0] == color) return true;
+                if (Pieces[2, 1] == color) return true;
+                if (Pieces[2, 2] == color) return true;
                 if (!GetAllPlayerAvailableActions(Color.White).Any()) return true;
             }
             return false;
         }
 
-        public List<AvailableAction> GetAllPlayerAvailableActions(BoardService boardService)
-        {
-            return GetAllPlayerAvailableActions(boardService.CurrentPlayer.Color);
-        }
         public List<AvailableAction> GetAllPlayerAvailableActions(Color color)
         {
             var availableActions = new List<AvailableAction>();
@@ -193,20 +143,20 @@ namespace HexaPawnService
             {
                 for (int x = 0; x <= 3 - 1; x++)
                 {
-                    if (Pieces[y, x] == (int)color)
+                    if (Pieces[y, x] == color)
                     {
-                        if (_moveService.CanMoveForward(y, x, (int)color, Pieces))
+                        if (_moveService.CanMoveForward(y, x, color, Pieces))
                         {
-                            availableActions.Add(new AvailableAction(y, x, y + _moveService.ForwardDirection((int)color), x, Actions.Forward));
+                            availableActions.Add(new AvailableAction(y, x, y + _moveService.ForwardDirection(color), x, Actions.Forward));
                         }
-                        if (_moveService.CanAttackLeft(y, x, (int)color, Pieces))
+                        if (_moveService.CanAttackLeft(y, x, color, Pieces))
                         {
-                            availableActions.Add(new AvailableAction(y, x, y + _moveService.ForwardDirection((int)color), x - 1, Actions.AttackLeft));
+                            availableActions.Add(new AvailableAction(y, x, y + _moveService.ForwardDirection(color), x - 1, Actions.AttackLeft));
 
                         }
-                        if (_moveService.CanAttackRight(y, x, (int)color, Pieces))
+                        if (_moveService.CanAttackRight(y, x, color, Pieces))
                         {
-                            availableActions.Add(new AvailableAction(y, x, y + _moveService.ForwardDirection((int)color), x + 1, Actions.AttackRight));
+                            availableActions.Add(new AvailableAction(y, x, y + _moveService.ForwardDirection(color), x + 1, Actions.AttackRight));
 
                         }
                     }
@@ -253,6 +203,11 @@ namespace HexaPawnService
 
             }
             return false;
+        }
+
+        public bool MakeAction(AvailableAction action)
+        {
+            return Execute(action);
         }
     }
 }

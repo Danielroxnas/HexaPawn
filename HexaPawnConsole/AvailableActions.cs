@@ -3,6 +3,35 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace HexaPawnConsole
 {
+    public class AvailableAction1  : IEquatable<AvailableAction1>
+    { 
+
+        public AvailableAction1()
+        {
+        }
+
+        public AvailableAction1(string key, int color, Actions actions)
+        {
+            Key = key;
+            Color = color;
+            Action = actions;
+        }
+
+        public string Key { get; }
+        public int Color { get; }
+        public Actions Action { get; }
+
+        public bool Equals([AllowNull] AvailableAction1 other)
+        {
+            if (other == null) return false;
+            if (other.Key == Key &&
+                other.Color == Color)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
     public class AvailableAction : IEquatable<AvailableAction>, IAvailableActions
     {
         public int FromX, FromY, ToX, ToY;

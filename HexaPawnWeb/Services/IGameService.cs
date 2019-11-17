@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using HexaPawnServices;
+using HexaPawnConsole;
 using HexaPawnWeb.Models;
 
 namespace HexaPawnWeb.Services
@@ -8,6 +8,6 @@ namespace HexaPawnWeb.Services
     {
         BoardService MakeAction(BoardActionDTO boardAction);
         BoardService GetBoard();
-        List<AvailableAction> GetActions(BoardService board);
+        List<AvailableAction1> GetActions(BoardService board);
     }
 }

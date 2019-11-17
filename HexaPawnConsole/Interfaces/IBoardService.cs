@@ -4,19 +4,20 @@ namespace HexaPawnConsole
 {
     public interface IBoardService
     {
-        Pieces Pieces { get; set; }
-        IPlayer CurrentPlayer { get; set; }
-        IPlayer P1 { get; set; }
-        IPlayer P2 { get; set; }
+   //     Pieces Pieces { get; set; }
+        Dictionary<string, int> Pieces1 { get; set; }
+        Player CurrentPlayer { get; set; }
+        Player P1 { get; set; }
+        Player P2 { get; set; }
         void AiLearn();
         void ChangeCurrentPlayer();
         bool CheckIfCurrentPlayerIsAI();
-        bool ExecuteAction(AvailableAction action);
-        List<AvailableAction> GetAllPlayerAvailableActions(Color color);
+        bool ExecuteAction(AvailableAction1 action);
+        List<AvailableAction1> GetAllPlayerAvailableActions1(Color color);
         void InitPlayers(bool playerOne, bool playerTwo);
         void InitPieces();
-        bool MakeRandomAction(List<AvailableAction> actions);
-        bool MakeAction(List<AvailableAction> actions, int index);
+        bool MakeRandomAction(List<AvailableAction1> actions);
+        bool MakeAction(List<AvailableAction1> actions, int index);
         void ResetBoard();
     }
 }

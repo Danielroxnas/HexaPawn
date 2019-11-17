@@ -1,4 +1,4 @@
-using HexaPawnServices;
+using HexaPawnConsole;
 using HexaPawnWeb.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
 namespace HexaPawnWeb
 {
     public class Startup
@@ -23,9 +22,9 @@ namespace HexaPawnWeb
         {
             services.AddTransient<IBoardService, BoardService>();
             services.AddTransient<IBoardState, BoardState>();
-            services.AddTransient<IMoveService, MoveService>();
+            services.AddTransient<IMovService, MovService>();
             services.AddTransient<IGameService, GameService>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

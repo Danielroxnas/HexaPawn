@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HexaPawnServices;
+using HexaPawnConsole;
 using HexaPawnWeb.Models;
 using HexaPawnWeb.Services;
 using Microsoft.AspNetCore.Http;
@@ -23,17 +23,23 @@ namespace HexaPawnWeb.Controllers
 
         }
         [HttpGet]
-        public BoardService GameBoard()
+        public string GameBoard()
         {
-           return  _gameService.GetBoard();
-            //return JsonConvert.SerializeObject(y);
+           var y = _gameService.GetBoard();
+           return JsonConvert.SerializeObject(y);
 
         }
-
         [HttpPost]
-        public object GetActions([FromBody]object boardService)
+        public object GetPieces([FromBody]BoardService boardService)
         {
-            var j = JsonConvert.DeserializeObject<BoardService>(boardService.ToString());
+           // var j = JsonConvert.DeserializeObject<BoardService>(boardService.ToString());
+            var pieces = _gameService.GetActions(boardService);
+            return JsonConvert.SerializeObject(pieces);
+        }
+        [HttpPost]
+        public object GetActions([FromBody]string boardService)
+        {
+            var j = JsonConvert.DeserializeObject<BoardService>(boardService);
             var actions = _gameService.GetActions(j);
             return JsonConvert.SerializeObject(actions);
         }

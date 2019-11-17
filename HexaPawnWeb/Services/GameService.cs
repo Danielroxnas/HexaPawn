@@ -1,9 +1,10 @@
-﻿using HexaPawnServices;
-using HexaPawnWeb.Models;
+﻿using HexaPawnConsole;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HexaPawnWeb.Services;
+using HexaPawnWeb.Models;
 
 namespace HexaPawnWeb.Services
 {
@@ -16,9 +17,9 @@ namespace HexaPawnWeb.Services
             _boardService = boardService;
         }
 
-        public List<AvailableAction> GetActions(BoardService board)
+        public List<AvailableAction1> GetActions(BoardService board)
         {
-            return board.GetAllPlayerAvailableActions(board.CurrentPlayer.Color);
+            return board.GetAllPlayerAvailableActions(board);
         }
 
         public BoardService GetBoard()
@@ -35,5 +36,17 @@ namespace HexaPawnWeb.Services
             return boardAction.BoardService;
 
         }
+
+
+
+
+    }
+    public class Test
+    {
+        public Test(Dictionary<string,int> testet)
+        {
+            Testet = testet;
+        }
+        public Dictionary<string,int> Testet { get; set; }
     }
 }
