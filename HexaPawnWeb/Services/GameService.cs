@@ -17,7 +17,7 @@ namespace HexaPawnWeb.Services
             _boardService = boardService;
         }
 
-        public List<AvailableAction1> GetActions(BoardService board)
+        public List<AvailableAction> GetActions(BoardService board)
         {
             return board.GetAllPlayerAvailableActions(board);
         }

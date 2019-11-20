@@ -7,13 +7,13 @@ namespace HexaPawnTests
 {
     public class MoveServiceTests
     {
-        private MovService _sut;
+        private MoveService _sut;
         private IBoardService _boardService;
 
         [SetUp]
         public void Setup()
         {
-            _sut = new MovService();
+            _sut = new MoveService();
 
             _boardService = new BoardService(new BoardState(), _sut);
             _boardService.InitPieces();
@@ -24,39 +24,39 @@ namespace HexaPawnTests
         public void It_should_move_piece_forward_direction_based_if_white()
         {
 
-            var result = _sut.MoveForward("C1", 1, _boardService.Pieces1);
+            var result = _sut.MoveForward("C1", Color.White, _boardService.Pieces);
             Assert.That(result, Is.EqualTo(true));
-            Assert.That(_boardService.Pieces1.First(x => x.Key == "B1").Value, Is.EqualTo((int)Color.White));
-            Assert.That(_boardService.Pieces1.First(x => x.Key == "C1").Value, Is.EqualTo((int)Color.Empty));
+            Assert.That(_boardService.Pieces.First(x => x.Key == "B1").Value, Is.EqualTo((int)Color.White));
+            Assert.That(_boardService.Pieces.First(x => x.Key == "C1").Value, Is.EqualTo((int)Color.Empty));
         }
 
         [Test]
         public void It_should_move_piece_forward_direction_based_if_black()
         {
-            var result = _sut.MoveForward("A1", 2, _boardService.Pieces1);
+            var result = _sut.MoveForward("A1", Color.Black, _boardService.Pieces);
 
             Assert.That(result, Is.EqualTo(true));
-            Assert.That(_boardService.Pieces1.First(x => x.Key == "B1").Value, Is.EqualTo((int)Color.Black));
-            Assert.That(_boardService.Pieces1.First(x => x.Key == "A1").Value, Is.EqualTo((int)Color.Empty));
+            Assert.That(_boardService.Pieces.First(x => x.Key == "B1").Value, Is.EqualTo((int)Color.Black));
+            Assert.That(_boardService.Pieces.First(x => x.Key == "A1").Value, Is.EqualTo((int)Color.Empty));
         }
 
         private static IEnumerable<TestCaseData> PieceTestData
         {
             get
             {
-                yield return new TestCaseData((int)Color.Black);
-                yield return new TestCaseData((int)Color.White);
+                yield return new TestCaseData(Color.Black);
+                yield return new TestCaseData(Color.White);
             }
         }
 
         [TestCaseSource(nameof(PieceTestData))]
-        public void It_should_not_move_piece_forward_if_blocked(int piece)
+        public void It_should_not_move_piece_forward_if_blocked(Color piece)
         {
-            _boardService.Pieces1["B1"] = piece;
-            var result = _sut.MoveForward("C1", 1, _boardService.Pieces1);
+            _boardService.Pieces["B1"] = piece;
+            var result = _sut.MoveForward("C1", Color.White, _boardService.Pieces);
             Assert.That(result, Is.EqualTo(false));
-            Assert.That(_boardService.Pieces1["C1"], Is.EqualTo((int)Color.White));
-            Assert.That(_boardService.Pieces1["B1"], Is.EqualTo(piece));
+            Assert.That(_boardService.Pieces["C1"], Is.EqualTo(Color.White));
+            Assert.That(_boardService.Pieces["B1"], Is.EqualTo(piece));
         }
 
         //[Test]

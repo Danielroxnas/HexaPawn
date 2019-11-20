@@ -1,82 +1,181 @@
-﻿namespace HexaPawnServices
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace HexaPawnConsole1
 {
-    public class MoveService : IMoveService
+    public class MovService : IMovService
     {
-
-
-        public int ForwardDirection(Color color)
+        public bool AttackLeft(string key, Color color, Dictionary<string, Color> pieces)
         {
-            return color == Color.White ? -1 : 1;
-        }
-
-        #region Can
-        public bool CanMoveForward(int y, int x, Color color, Color[,] Pieces)
-        {
-            return Pieces[y + ForwardDirection(color), x] == Color.Empty;
-        }
-        public bool CanAttackLeft(int y, int x, Color color, Color[,] Pieces)
-        {
-            if ((x >= 1 && x <= 2))
+            if (!CanAttackLeft(key, color, pieces))
             {
-                return Pieces[y + ForwardDirection(color), x - 1] != Color.Empty &&
-                Pieces[y + ForwardDirection(color), x - 1] != color;
+                return false;
             }
-            return false;
+            return ExecuteAction(key, color, pieces, -1);
         }
 
-        public bool CanAttackRight(int y, int x, Color color, Color[,] Pieces)
+        public bool AttackRight(string key, Color color, Dictionary<string, Color> pieces)
         {
-            if ((x >= 0 && x <= 1))
+            if (!CanAttackRight(key, color, pieces))
             {
-                return Pieces[y + ForwardDirection(color), x + 1] != Color.Empty &&
-                Pieces[y + ForwardDirection(color), x + 1] != color;
+                return false;
             }
-            return false;
-        }
-        #endregion
-
-        #region Execute
-        public bool MoveForward(int y, int x, Color color, Color[,] Pieces)
-        {
-            if (Pieces[y, x] == color)
-            {
-                if (CanMoveForward(y, x, color, Pieces))
-                {
-                    Pieces[y + ForwardDirection(color), x] = color;
-                    Pieces[y, x] = Color.Empty;
-                    return true;
-                }
-            }
-            return false;
-        }
-        public bool AttackLeft(int y, int x, Color color, Color[,] Pieces)
-        {
-            if (Pieces[y, x] == color)
-            {
-                if (CanAttackLeft(y, x, color, Pieces))
-                {
-                    Pieces[y + ForwardDirection(color), x - 1] = color;
-                    Pieces[y, x] = Color.Empty;
-                    return true;
-                }
-            }
-            return false;
+            return ExecuteAction(key, color, pieces, 1);
         }
 
-        public bool AttackRight(int y, int x, Color color, Color[,] Pieces)
+        public bool CanAttackLeft(string key, Color color, Dictionary<string, Color> pieces)
         {
-            if (Pieces[y, x] == color)
-            {
-                if (CanAttackRight(y, x, color, Pieces))
-                {
-                    Pieces[y + ForwardDirection(color), x + 1] = color;
-                    Pieces[y, x] = Color.Empty;
+            var (y, x) = GenerateCoods(key, pieces);
+            var left = x - 1;
 
-                    return true;
-                }
-            }
-            return false;
+            var expectedMove = ForwardDirection(color, y) + left;
+
+            return pieces.Any(piece =>
+            left >= 1 &&
+            piece.Key == expectedMove &&
+            piece.Value == opponent(color));
         }
-        #endregion
+
+        private Color opponent(Color color) => color == Color.White ? Color.Black : Color.White;
+
+        public bool CanAttackRight(string key, Color color, Dictionary<string, Color> pieces)
+        {
+            var (y, x) = GenerateCoods(key, pieces);
+            var right = x + 1;
+            var expectedMove = ForwardDirection(color, y) + right;
+
+            return pieces.Any(piece =>
+            right <= 3 &&
+            piece.Key == expectedMove &&
+            piece.Value == opponent(color));
+        }
+
+        public bool CanMoveForward(string key, Color color, Dictionary<string, Color> pieces)
+        {
+            var (y, x) = GenerateCoods(key, pieces);
+            var expectedMove = ForwardDirection(color, y) + x;
+            return !pieces.Any(x => x.Key == expectedMove && x.Value != 0);
+        }
+
+        public static string ForwardDirection(Color x, string y) =>
+
+        x switch
+        {
+            Color.White => y == "C" ? "B" : "A",
+            Color.Black => y == "A" ? "B" : "C",
+            _ => y
+        };
+        private (string y, int x) GenerateCoods(string key, Dictionary<string, Color> pieces)
+        {
+            var x = pieces.First(x => x.Key == key).Key[1].ToString();
+            var y = pieces.First(x => x.Key == key).Key[0].ToString();
+            return (y, int.Parse(x));
+        }
+
+        public bool MoveForward(string key, Color color, Dictionary<string, Color> pieces)
+        {
+            if (!CanMoveForward(key, color, pieces))
+            {
+                return false;
+            }
+            return ExecuteAction(key, color, pieces, 0);
+        }
+
+        private bool ExecuteAction(string key, Color color, Dictionary<string, Color> pieces, int side)
+        {
+            var (y, x) = GenerateCoods(key, pieces);
+            var newDirection = ForwardDirection(color, y) + (x + side);
+            pieces[key] = 0;
+            pieces[newDirection] = color;
+            return true;
+        }
     }
+
+
+
+
+
+
+
+    //public class MoveService
+    //{
+    //    public bool AttackLeft(BState key, List<BState> board)
+    //    {
+    //        if (!CanAttackLeft(key, board))
+    //        {
+    //            return false;
+    //        }
+    //        return ExecuteAction(key, board, -1);
+    //    }
+
+    //    public bool AttackRight(BState key, List<BState> board)
+    //    {
+    //        if (!CanAttackRight(key, board))
+    //        {
+    //            return false;
+    //        }
+    //        return ExecuteAction(key, board, 1);
+    //    }
+
+    //    public bool CanAttackLeft(BState key, List<BState> board)
+    //    {
+
+    //        var expectedMove = ForwardDirection((Color)key.Color, key.Coord.Y);
+    //        var left = key.Coord.X - 1;
+
+    //        return board.Any(piece =>
+    //        left >= 1 &&
+    //        piece.Coord.Y == expectedMove &&
+    //        piece.Coord.X == left &&
+    //        piece.Color == (int)Opponent((Color)key.Color));
+    //    }  
+
+    //    private Color Opponent(Color color) => color == Color.White ? Color.Black : Color.White;
+
+    //    public bool CanAttackRight(BState key, List<BState> board)
+    //    {
+    //        var expectedMove = ForwardDirection((Color)key.Color, key.Coord.Y);
+    //        var right = key.Coord.X + 1;
+
+    //        return board.Any(piece =>
+    //        right <= 3 &&
+    //        piece.Coord.Y == expectedMove &&
+    //        piece.Coord.X == right &&
+    //        piece.Color == (int)Opponent((Color)key.Color));
+    //    }
+
+    //    public bool CanMoveForward(BState key, List<BState> board)
+    //    {
+    //        var expectedMove = ForwardDirection((Color)key.Color, key.Coord.Y);
+    //        return !board.Any(x => x.Coord.Y == expectedMove && x.Coord.X == key.Coord.X && x.Color != 0);
+    //    }
+
+    //    public static int ForwardDirection(Color x, int y) =>
+
+    //    x switch
+    //    {
+    //        Color.White => y == 3 ? 2 : 1,
+    //        Color.Black => y == 1 ? 2 : 3,
+    //        _ => y
+    //    };
+
+    //    public bool MoveForward(BState key, List<BState> board)
+    //    {
+    //        if (!CanMoveForward(key, board))
+    //        {
+    //            return false;
+    //        }
+    //        return ExecuteAction(key, board, 0);
+    //    }
+
+    //    public bool ExecuteAction(BState key, List<BState> board, int side)
+    //    {
+    //        var newCoord = new BState(new Coord(ForwardDirection((Color)key.Color, key.Coord.Y) , (key.Coord.X + side)), key.Color);
+    //        var b = board.IndexOf(newCoord);
+    //        board[b].Color = key.Color;
+    //        key.Color = 0;
+    //        return true;
+    //    }
+    //}
 }

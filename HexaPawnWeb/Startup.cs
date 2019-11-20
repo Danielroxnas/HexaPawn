@@ -22,7 +22,7 @@ namespace HexaPawnWeb
         {
             services.AddTransient<IBoardService, BoardService>();
             services.AddTransient<IBoardState, BoardState>();
-            services.AddTransient<IMovService, MovService>();
+            services.AddTransient<IMoveService, MoveService>();
             services.AddTransient<IGameService, GameService>();
             services.AddControllersWithViews().AddNewtonsoftJson();
             // In production, the React files will be served from this directory

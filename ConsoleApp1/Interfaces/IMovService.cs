@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace HexaPawnConsole
+namespace HexaPawnConsole1
 {
-    public interface IMoveService
+    public interface IMovService
     {
         bool AttackLeft(string key, Color color, Dictionary<string, Color> pieces);
         bool AttackRight(string key, Color color, Dictionary<string, Color> pieces);

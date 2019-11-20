@@ -2,21 +2,24 @@
 
 namespace HexaPawnConsole
 {
-    public class AI
+    public class Player : IPlayer
     {
-        public AI(Color piece, IBoardState boardState)
+        public Player(Color piece, IBoardState boardState, bool human)
         {
             Color = piece;
             BoardState = boardState;
+            Human = human;
         }
-        public AvailableAction1 LastAvailableActions { get; set; } = new AvailableAction1();
+        public AvailableAction LastAvailableActions { get; set; } = new AvailableAction();
+
         public Color Color { get; set; }
         public int TimesWon { get; set; } = 0;
         public IBoardState BoardState { get; }
+        public bool Human { get; }
         public BoardService LastBord { get; set; }
         public void LastState(BoardService board)
         {
-            var b = BoardState.Boards.Where(x => x.Pieces1.OrderBy(kvp => kvp.Key).SequenceEqual(board.Pieces1.OrderBy(kvp => kvp.Key))).FirstOrDefault();
+            var b = BoardState.Boards.Where(x => x.Pieces.OrderBy(kvp => kvp.Key).SequenceEqual(board.Pieces.OrderBy(kvp => kvp.Key))).FirstOrDefault();
 
             LastBord = b ?? board;
         }

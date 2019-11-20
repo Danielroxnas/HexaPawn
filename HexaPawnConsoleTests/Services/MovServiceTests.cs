@@ -12,12 +12,12 @@ namespace HexaPawnConsole.Tests
         [TestMethod()]
         public void CanMoveForwardTest()
         {
-            var sut = new MovService();
+            var sut = new MoveService();
 
             var service = new BoardService(null, null);
             service.InitPieces();
-            service.Pieces1["B3"] = 1;
-            var result = sut.CanAttackLeft("B3", 1 , service.Pieces1);
+            service.Pieces["B3"] = Color.White;
+            var result = sut.CanAttackLeft("B3", Color.White, service.Pieces);
             
         }
     }

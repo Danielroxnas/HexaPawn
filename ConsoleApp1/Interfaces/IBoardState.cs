@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using HexaPawnConsole11;
+using System.Collections.Generic;
 
-namespace HexaPawnServices
+namespace HexaPawnConsole1
 {
     public interface IBoardState
     {
-        BoardService PreviusBoard { get; set; }
-        List<BoardService> Boards { get; set; }
-        void Copy(BoardService board);
-        void CreatePreviuesBoard(BoardService board);
-        BoardService GetBoardState(BoardService board);
+        IBoard PreviusBoard { get; set; }
+        List<IBoard> Boards { get; set; }
+        void Copy(IBoard board);
+        void CreatePreviuesBoard(IBoard board);
+        IBoard GetBoardState(IBoard board);
+
     }
 }

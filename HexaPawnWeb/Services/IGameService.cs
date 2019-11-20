@@ -8,6 +8,6 @@ namespace HexaPawnWeb.Services
     {
         BoardService MakeAction(BoardActionDTO boardAction);
         BoardService GetBoard();
-        List<AvailableAction1> GetActions(BoardService board);
+        List<AvailableAction> GetActions(BoardService board);
     }
 }

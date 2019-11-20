@@ -15,20 +15,13 @@ namespace HexaPawnConsole
         }
         public BoardService GetBoardState(BoardService board)
         {
-            var b = Boards.Where(z => z.Pieces1.Equals(board.Pieces1)).FirstOrDefault();
+            var b = Boards.Where(x => x.Pieces.OrderBy(kvp => kvp.Key).SequenceEqual(board.Pieces.OrderBy(kvp => kvp.Key))).FirstOrDefault();
 
             return b ?? null;
         }
-
-        public void CreatePreviuesBoard(BoardService board)
-        {
-            var b = Boards.Where(z => z.Pieces1.Equals(board.Pieces1)).FirstOrDefault();
-            PreviusBoard = b;
-        }
         public void Copy(BoardService board)
         {
-            if(!Boards.Any(x => x.Pieces1.OrderBy(kvp => kvp.Key).SequenceEqual(board.Pieces1.OrderBy(kvp => kvp.Key))))
-        //    if (!Boards.Any(z => z.Pieces1.Equals(board.Pieces1)))
+            if(!Boards.Any(x => x.Pieces.OrderBy(kvp => kvp.Key).SequenceEqual(board.Pieces.OrderBy(kvp => kvp.Key))))
             {
                 Boards.Add(new BoardService(board, this, null));
             }

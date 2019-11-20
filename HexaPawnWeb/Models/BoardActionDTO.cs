@@ -9,7 +9,7 @@ namespace HexaPawnWeb.Models
     public class BoardActionDTO
     {
         public BoardService BoardService{ get; set; }
-        public AvailableAction1 AvailableAction { get; set; }
+        public AvailableAction AvailableAction { get; set; }
 
     }
 }
